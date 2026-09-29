@@ -1,0 +1,94 @@
+<%- include('../partials/header') %>
+
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">My Registrations</h1>
+      <p class="page-subtitle">All events you've registered for</p>
+    </div>
+    <a href="/events" class="btn-secondary">Browse More Events →</a>
+  </div>
+
+  <% const catColors = {coding:'#6366f1',music:'#ec4899',dance:'#f59e0b',sports:'#10b981',art:'#8b5cf6',science:'#06b6d4',business:'#f97316',gaming:'#84cc16',photography:'#14b8a6',drama:'#ef4444',debate:'#3b82f6',literature:'#a78bfa',other:'#64748b'}; %>
+
+  <!-- Upcoming -->
+  <div class="dashboard-section">
+    <h2 class="section-title-md">⏳ Upcoming Events (<%= upcoming.length %>)</h2>
+    <% if (upcoming.length === 0) { %>
+      <div class="empty-state-sm">
+        <p>No upcoming registrations. <a href="/events">Find an event to join →</a></p>
+      </div>
+    <% } else { %>
+      <div class="registrations-full-list">
+        <% upcoming.forEach(reg => { %>
+          <% if (reg.event) { %>
+            <div class="registration-full-card">
+              <div class="reg-card-color" style="background:<%= catColors[reg.event.category]||'#6366f1' %>"></div>
+              <div class="reg-card-body">
+                <div class="reg-card-main">
+                  <h3><a href="/events/<%= reg.event._id %>"><%= reg.event.title %></a></h3>
+                  <span class="event-category-badge-sm" style="background:<%= catColors[reg.event.category]||'#6366f1' %>22;color:<%= catColors[reg.event.category]||'#6366f1' %>">
+                    <%= reg.event.category %>
+                  </span>
+                </div>
+                <div class="reg-card-meta">
+                  <span>📅 <%= new Date(reg.event.date).toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) %></span>
+                  <span>⏰ <%= reg.event.time %></span>
+                  <span>📍 <%= reg.event.venue %></span>
+                </div>
+                <div class="reg-card-footer">
+                  <div>
+                    <span class="reg-date-small">Registered on <%= new Date(reg.registeredAt).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) %></span>
+                    <span class="reg-status-badge">✓ Confirmed</span>
+                  </div>
+                  <div class="reg-card-actions">
+                    <a href="/events/<%= reg.event._id %>" class="btn-sm">View Event</a>
+                    <form action="/registrations/<%= reg.event._id %>?_method=DELETE" method="POST" style="display:inline">
+                      <button type="submit" class="btn-sm btn-danger-outline" onclick="return confirm('Are you sure you want to unregister from this event?')">
+                        Unregister
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% } %>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Past -->
+  <div class="dashboard-section">
+    <h2 class="section-title-md">✅ Past Events (<%= past.length %>)</h2>
+    <% if (past.length === 0) { %>
+      <div class="empty-state-sm"><p>No past event registrations yet.</p></div>
+    <% } else { %>
+      <div class="registrations-full-list">
+        <% past.forEach(reg => { %>
+          <% if (reg.event) { %>
+            <div class="registration-full-card registration-past">
+              <div class="reg-card-color" style="background:#64748b"></div>
+              <div class="reg-card-body">
+                <div class="reg-card-main">
+                  <h3><a href="/events/<%= reg.event._id %>"><%= reg.event.title %></a></h3>
+                  <span class="past-badge-sm">Completed</span>
+                </div>
+                <div class="reg-card-meta">
+                  <span>📅 <%= new Date(reg.event.date).toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) %></span>
+                  <span>📍 <%= reg.event.venue %></span>
+                </div>
+                <div class="reg-card-footer">
+                  <span class="reg-date-small">Attended</span>
+                  <a href="/events/<%= reg.event._id %>" class="btn-sm">View</a>
+                </div>
+              </div>
+            </div>
+          <% } %>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

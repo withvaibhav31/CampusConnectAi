@@ -1,0 +1,224 @@
+<%- include('partials/header') %>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🤖 AI-Powered Recommendations</div>
+    <h1 class="hero-title">
+      Your Campus.<br>
+      <span class="hero-accent">Supercharged.</span>
+    </h1>
+    <p class="hero-subtitle">
+      Discover events, join clubs, and get AI-personalized recommendations
+      tailored to your interests. Never miss what matters to you.
+    </p>
+    <div class="hero-cta">
+      <% if (currentUser) { %>
+        <a href="/dashboard" class="btn-primary">Go to Dashboard →</a>
+        <a href="/events" class="btn-secondary">Browse Events</a>
+      <% } else { %>
+        <a href="/auth/signup" class="btn-primary">Get Started Free →</a>
+        <a href="/events" class="btn-secondary">Browse Events</a>
+      <% } %>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <strong><%= stats.totalEvents %>+</strong>
+        <span>Events</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <strong><%= stats.totalStudents %>+</strong>
+        <span>Students</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <strong><%= stats.totalClubs %>+</strong>
+        <span>Clubs</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <strong><%= stats.totalRegistrations %>+</strong>
+        <span>Registrations</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card-float card-1">
+      <span class="card-icon">🏆</span>
+      <div>
+        <strong>HackVerse 2024</strong>
+        <span>₹50,000 Prize Pool</span>
+      </div>
+    </div>
+    <div class="hero-card-float card-2">
+      <span class="card-icon">🤖</span>
+      <div>
+        <strong>AI Recommended</strong>
+        <span>Based on your interests</span>
+      </div>
+    </div>
+    <div class="hero-card-float card-3">
+      <span class="card-icon">🎵</span>
+      <div>
+        <strong>Resonance Concert</strong>
+        <span>200+ Registered</span>
+      </div>
+    </div>
+    <div class="hero-orb"></div>
+  </div>
+</section>
+
+<!-- Category Quick Filter -->
+<section class="categories-section">
+  <div class="section-inner">
+    <h2 class="section-label">Explore by Category</h2>
+    <div class="categories-scroll">
+      <% const catIcons = {coding:'💻',music:'🎵',dance:'💃',sports:'⚽',art:'🎨',science:'🔬',business:'💼',gaming:'🎮',photography:'📸',drama:'🎭',debate:'🗣',literature:'📚'}; %>
+      <% categories.forEach(cat => { %>
+        <a href="/events?category=<%= cat %>" class="cat-chip">
+          <span><%= catIcons[cat] || '🎯' %></span>
+          <span><%= cat.charAt(0).toUpperCase() + cat.slice(1) %></span>
+        </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Events -->
+<section class="events-section">
+  <div class="section-inner">
+    <div class="section-header">
+      <div>
+        <span class="section-label">🔥 Featured Events</span>
+        <h2 class="section-title">What's Happening</h2>
+      </div>
+      <a href="/events" class="view-all-link">View All Events →</a>
+    </div>
+
+    <% if (featuredEvents.length === 0) { %>
+      <div class="empty-state">
+        <span class="empty-icon">📅</span>
+        <h3>No events yet</h3>
+        <p>Check back soon — clubs are planning amazing events!</p>
+      </div>
+    <% } else { %>
+      <div class="events-grid">
+        <% featuredEvents.forEach((event, i) => { %>
+          <% const catColors = {coding:'#6366f1',music:'#ec4899',dance:'#f59e0b',sports:'#10b981',art:'#8b5cf6',science:'#06b6d4',business:'#f97316',gaming:'#84cc16',photography:'#14b8a6',drama:'#ef4444',debate:'#3b82f6',literature:'#a78bfa'}; %>
+          <article class="event-card <%= i === 0 ? 'event-card-featured' : '' %>">
+            <div class="event-card-top" style="background: linear-gradient(135deg, <%= catColors[event.category] || '#6366f1' %>22, <%= catColors[event.category] || '#6366f1' %>44);">
+              <% if (event.poster) { %>
+                <img src="<%= event.poster %>" alt="<%= event.title %>" class="event-poster-img" />
+              <% } else { %>
+                <div class="event-poster-placeholder">
+                  <span><%= catColors[event.category] ? ['💻','🎵','💃','⚽','🎨','🔬','💼','🎮','📸','🎭','🗣','📚'][Object.keys(catColors).indexOf(event.category)] || '🎯' : '🎯' %></span>
+                </div>
+              <% } %>
+              <span class="event-category-badge" style="background:<%= catColors[event.category] || '#6366f1' %>"><%= event.category %></span>
+              <% if (event.isPlacementRelated) { %>
+                <span class="placement-badge">🏢 Placement</span>
+              <% } %>
+            </div>
+            <div class="event-card-body">
+              <h3 class="event-title"><a href="/events/<%= event._id %>"><%= event.title %></a></h3>
+              <p class="event-desc"><%= event.description.substring(0, 100) %>...</p>
+              <div class="event-meta">
+                <span>📅 <%= new Date(event.date).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'}) %></span>
+                <span>📍 <%= event.venue.substring(0,25) %><%= event.venue.length > 25 ? '...' : '' %></span>
+              </div>
+              <div class="event-footer">
+                <span class="reg-count"><%= event.registrationCount %> registered</span>
+                <a href="/events/<%= event._id %>" class="btn-sm">View Details →</a>
+              </div>
+            </div>
+          </article>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<!-- AI Feature Highlight -->
+<section class="ai-section">
+  <div class="section-inner">
+    <div class="ai-feature-grid">
+      <div class="ai-feature-text">
+        <span class="section-label">🧠 Powered by AI</span>
+        <h2 class="section-title">Smart Recommendations, Just for You</h2>
+        <p>Our AI analyzes your interests, past event attendance, and engagement patterns to surface the most relevant events on campus. No more scrolling through everything — just what you love.</p>
+        <div class="ai-features-list">
+          <div class="ai-feat-item">
+            <span class="feat-icon">🎯</span>
+            <div>
+              <strong>Personalized Feed</strong>
+              <p>Events matched to your unique interest profile</p>
+            </div>
+          </div>
+          <div class="ai-feat-item">
+            <span class="feat-icon">🏷️</span>
+            <div>
+              <strong>Auto-Tagging</strong>
+              <p>AI detects event categories from descriptions automatically</p>
+            </div>
+          </div>
+          <div class="ai-feat-item">
+            <span class="feat-icon">💬</span>
+            <div>
+              <strong>CampusBot</strong>
+              <p>Ask our AI chatbot anything about events, categories & more</p>
+            </div>
+          </div>
+        </div>
+        <% if (!currentUser) { %>
+          <a href="/auth/signup" class="btn-primary" style="margin-top:1.5rem;display:inline-block">Try AI Recommendations →</a>
+        <% } %>
+      </div>
+      <div class="ai-feature-visual">
+        <div class="ai-demo-card">
+          <div class="ai-demo-header">
+            <span class="ai-dot"></span>
+            <span>AI Recommendation Engine</span>
+          </div>
+          <div class="ai-demo-body">
+            <div class="ai-step">
+              <span class="step-num">1</span>
+              <span>Analyzing your interests: <code>coding, gaming, science</code></span>
+            </div>
+            <div class="ai-step">
+              <span class="step-num">2</span>
+              <span>Checking past registrations (3 events)</span>
+            </div>
+            <div class="ai-step">
+              <span class="step-num">3</span>
+              <span>Scoring 10 upcoming events...</span>
+            </div>
+            <div class="ai-step active">
+              <span class="step-num">✓</span>
+              <span>Recommended: <strong>HackVerse 2024</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<% if (!currentUser) { %>
+<section class="cta-section">
+  <div class="section-inner">
+    <div class="cta-box">
+      <h2>Ready to connect with your campus?</h2>
+      <p>Join thousands of students already discovering amazing events</p>
+      <div class="cta-buttons">
+        <a href="/auth/signup?role=student" class="btn-primary">I'm a Student →</a>
+        <a href="/auth/signup?role=club" class="btn-outline">Register a Club →</a>
+      </div>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<%- include('partials/footer') %>

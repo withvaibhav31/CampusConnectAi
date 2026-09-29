@@ -1,0 +1,140 @@
+<%- include('../partials/header') %>
+
+<div class="auth-page">
+  <div class="auth-visual">
+    <div class="auth-visual-inner">
+      <div class="auth-brand">◈ CampusConnect AI</div>
+      <h2>Join thousands of students on campus.</h2>
+      <div class="auth-features">
+        <div class="af-item">🎯 Get AI-personalized event recommendations</div>
+        <div class="af-item">📝 Register for events in one click</div>
+        <div class="af-item">🔔 Get notified about events you'll love</div>
+        <div class="af-item">🏆 Track your campus journey</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-form-container">
+      <h1 class="auth-title">Create account</h1>
+      <p class="auth-subtitle">Join CampusConnect for free</p>
+
+      <!-- Role Toggle -->
+      <div class="role-toggle">
+        <button type="button" class="role-btn active" id="studentBtn" onclick="switchRole('student')">
+          👨‍🎓 Student
+        </button>
+        <button type="button" class="role-btn" id="clubBtn" onclick="switchRole('club')">
+          🏢 Club / Organization
+        </button>
+      </div>
+
+      <form action="/auth/signup" method="POST" class="auth-form" id="signupForm">
+        <input type="hidden" name="role" id="roleInput" value="student" />
+
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" class="form-input" placeholder="Your full name" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" class="form-input" placeholder="your@college.edu" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" class="form-input" placeholder="Min. 6 characters" required minlength="6" />
+        </div>
+
+        <!-- Student Fields -->
+        <div id="studentFields">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="department">Department</label>
+              <input type="text" id="department" name="department" class="form-input" placeholder="e.g. Computer Science" />
+            </div>
+            <div class="form-group">
+              <label for="year">Year</label>
+              <select id="year" name="year" class="form-input">
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Your Interests <span class="label-hint">(select all that apply)</span></label>
+            <div class="interests-grid">
+              <% const interests = [
+                {val:'coding',label:'💻 Coding'},
+                {val:'music',label:'🎵 Music'},
+                {val:'dance',label:'💃 Dance'},
+                {val:'sports',label:'⚽ Sports'},
+                {val:'art',label:'🎨 Art'},
+                {val:'science',label:'🔬 Science'},
+                {val:'business',label:'💼 Business'},
+                {val:'gaming',label:'🎮 Gaming'},
+                {val:'photography',label:'📸 Photography'},
+                {val:'drama',label:'🎭 Drama'},
+                {val:'debate',label:'🗣 Debate'},
+                {val:'literature',label:'📚 Literature'}
+              ]; %>
+              <% interests.forEach(i => { %>
+                <label class="interest-chip">
+                  <input type="checkbox" name="interests" value="<%= i.val %>" />
+                  <span><%= i.label %></span>
+                </label>
+              <% }) %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Club Fields -->
+        <div id="clubFields" style="display:none">
+          <div class="form-group">
+            <label for="clubName">Club / Organization Name</label>
+            <input type="text" id="clubName" name="clubName" class="form-input" placeholder="e.g. CodeCraft Club" />
+          </div>
+          <div class="form-group">
+            <label for="clubCategory">Club Category</label>
+            <select id="clubCategory" name="clubCategory" class="form-input">
+              <option value="technical">Technical</option>
+              <option value="cultural">Cultural</option>
+              <option value="sports">Sports</option>
+              <option value="social">Social</option>
+              <option value="academic">Academic</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="clubDescription">Club Description</label>
+            <textarea id="clubDescription" name="clubDescription" class="form-input form-textarea" placeholder="Tell students about your club..."></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary btn-full">Create Account →</button>
+      </form>
+
+      <p class="auth-switch">
+        Already have an account? <a href="/auth/login">Sign in →</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchRole(role) {
+  document.getElementById('roleInput').value = role;
+  document.getElementById('studentFields').style.display = role === 'student' ? 'block' : 'none';
+  document.getElementById('clubFields').style.display = role === 'club' ? 'block' : 'none';
+  document.getElementById('studentBtn').classList.toggle('active', role === 'student');
+  document.getElementById('clubBtn').classList.toggle('active', role === 'club');
+}
+
+// Pre-select role from URL param
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('role') === 'club') switchRole('club');
+</script>
+
+<%- include('../partials/footer') %>

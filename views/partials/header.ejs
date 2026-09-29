@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title || 'CampusConnect AI' %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">
+      <span class="brand-icon">◈</span>
+      <span>Campus<strong>Connect</strong></span>
+      <span class="ai-badge">AI</span>
+    </a>
+
+    <div class="nav-links">
+      <a href="/events" class="nav-link">Events</a>
+      <% if (currentUser) { %>
+        <a href="/dashboard" class="nav-link">Dashboard</a>
+        <% if (currentUser.role === 'student') { %>
+          <a href="/registrations/my" class="nav-link">My Registrations</a>
+        <% } %>
+        <% if (currentUser.role === 'club' || currentUser.role === 'admin') { %>
+          <a href="/events/create" class="nav-link nav-cta">+ New Event</a>
+        <% } %>
+        <div class="nav-user-menu">
+          <button class="nav-user-btn">
+            <span class="user-avatar"><%= currentUser.name.charAt(0).toUpperCase() %></span>
+            <span class="user-name-short"><%= currentUser.name.split(' ')[0] %></span>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="user-dropdown">
+            <div class="dropdown-header">
+              <strong><%= currentUser.name %></strong>
+              <span class="role-tag"><%= currentUser.role %></span>
+            </div>
+            <a href="/auth/profile" class="dropdown-item">⚙ Profile Settings</a>
+            <a href="/auth/logout" class="dropdown-item dropdown-danger">→ Logout</a>
+          </div>
+        </div>
+      <% } else { %>
+        <a href="/auth/login" class="nav-link">Login</a>
+        <a href="/auth/signup" class="nav-link btn-primary-sm">Join Free</a>
+      <% } %>
+    </div>
+
+    <button class="nav-toggle" id="navToggle">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="flash-messages">
+  <% if (success && success.length > 0) { %>
+    <div class="flash flash-success">
+      <span>✓</span> <%= success[0] %>
+      <button onclick="this.parentElement.remove()">×</button>
+    </div>
+  <% } %>
+  <% if (error && error.length > 0) { %>
+    <div class="flash flash-error">
+      <span>!</span> <%= error[0] %>
+      <button onclick="this.parentElement.remove()">×</button>
+    </div>
+  <% } %>
+</div>
+
+<main class="main-content">

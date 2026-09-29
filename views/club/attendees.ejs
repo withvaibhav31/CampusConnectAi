@@ -1,0 +1,60 @@
+<%- include('../partials/header') %>
+
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Attendees</h1>
+      <p class="page-subtitle"><%= event.title %></p>
+    </div>
+    <a href="/dashboard" class="btn-secondary">← Back to Dashboard</a>
+  </div>
+
+  <div class="attendees-info">
+    <span><strong><%= attendees.length %></strong> registered out of <strong><%= event.capacity %></strong> capacity</span>
+    <div class="capacity-bar" style="max-width:300px">
+      <div class="capacity-fill" style="width:<%= Math.min((attendees.length/event.capacity)*100,100) %>%"></div>
+    </div>
+  </div>
+
+  <% if (attendees.length === 0) { %>
+    <div class="empty-state-sm">
+      <p>No registrations yet for this event.</p>
+    </div>
+  <% } else { %>
+    <div class="attendees-table-wrapper">
+      <table class="attendees-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Student Name</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Year</th>
+            <th>Registered On</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% attendees.forEach((reg, i) => { %>
+            <tr>
+              <td><%= i + 1 %></td>
+              <td>
+                <div class="attendee-name">
+                  <span class="attendee-avatar"><%= reg.user.name.charAt(0) %></span>
+                  <%= reg.user.name %>
+                </div>
+              </td>
+              <td><%= reg.user.email %></td>
+              <td><%= reg.user.department || '-' %></td>
+              <td><%= reg.user.year ? reg.user.year + ' yr' : '-' %></td>
+              <td><%= new Date(reg.registeredAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) %></td>
+              <td><span class="status-badge upcoming"><%= reg.status %></span></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

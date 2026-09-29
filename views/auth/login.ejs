@@ -1,0 +1,67 @@
+<%- include('../partials/header') %>
+
+<div class="auth-page">
+  <div class="auth-visual">
+    <div class="auth-visual-inner">
+      <div class="auth-brand">◈ CampusConnect AI</div>
+      <h2>Your AI-powered<br>campus hub awaits.</h2>
+      <div class="auth-features">
+        <div class="af-item">🎯 Personalized event recommendations</div>
+        <div class="af-item">🤖 AI chatbot for instant answers</div>
+        <div class="af-item">📅 Never miss a campus event</div>
+        <div class="af-item">🏆 Join hackathons, concerts & more</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-form-container">
+      <h1 class="auth-title">Welcome back</h1>
+      <p class="auth-subtitle">Sign in to your CampusConnect account</p>
+
+      <form action="/auth/login" method="POST" class="auth-form">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" class="form-input" placeholder="your@email.com" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" class="form-input" placeholder="••••••••" required />
+        </div>
+        <button type="submit" class="btn-primary btn-full">Sign In →</button>
+      </form>
+
+      <div class="auth-divider"><span>or try with</span></div>
+      <div class="demo-accounts">
+        <p class="demo-label">Demo Accounts</p>
+        <div class="demo-grid">
+          <button class="demo-btn" onclick="fillDemo('arjun@student.edu','password123')">
+            👨‍💻 Student (Coding)
+          </button>
+          <button class="demo-btn" onclick="fillDemo('priya@student.edu','password123')">
+            🎵 Student (Arts)
+          </button>
+          <button class="demo-btn" onclick="fillDemo('codecraft@campus.edu','password123')">
+            🏢 Club Admin
+          </button>
+          <button class="demo-btn" onclick="fillDemo('sports@campus.edu','password123')">
+            ⚽ Sports Club
+          </button>
+        </div>
+      </div>
+
+      <p class="auth-switch">
+        Don't have an account? <a href="/auth/signup">Create one free →</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+function fillDemo(email, pass) {
+  document.getElementById('email').value = email;
+  document.getElementById('password').value = pass;
+}
+</script>
+
+<%- include('../partials/footer') %>

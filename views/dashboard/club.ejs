@@ -1,0 +1,113 @@
+<%- include('../partials/header') %>
+
+<div class="page-container">
+  <div class="dashboard-header">
+    <div class="dashboard-welcome">
+      <div class="welcome-avatar club-avatar"><%= (currentUser.clubName || currentUser.name).charAt(0) %></div>
+      <div>
+        <h1><%= currentUser.clubName || currentUser.name %></h1>
+        <p>Club Dashboard · <%= currentUser.clubCategory || 'Campus Club' %></p>
+      </div>
+    </div>
+    <a href="/events/create" class="btn-primary">+ Create New Event</a>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <span class="stat-icon">🎉</span>
+      <div><strong><%= myEvents.length %></strong><span>Total Events</span></div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-icon">⏳</span>
+      <div><strong><%= upcomingEvents.length %></strong><span>Upcoming</span></div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-icon">✅</span>
+      <div><strong><%= pastEvents.length %></strong><span>Completed</span></div>
+    </div>
+    <div class="stat-card">
+      <span class="stat-icon">👥</span>
+      <div><strong><%= totalRegistrations %></strong><span>Total Registrations</span></div>
+    </div>
+  </div>
+
+  <!-- Upcoming Events -->
+  <div class="dashboard-section">
+    <div class="section-header-sm">
+      <h2>⏳ Upcoming Events</h2>
+      <a href="/events/create" class="btn-primary btn-sm">+ Create</a>
+    </div>
+    <% if (upcomingEvents.length === 0) { %>
+      <div class="empty-state-sm">
+        <p>No upcoming events. <a href="/events/create">Create your first event →</a></p>
+      </div>
+    <% } else { %>
+      <div class="club-events-table">
+        <div class="table-header">
+          <span>Event</span>
+          <span>Date</span>
+          <span>Registrations</span>
+          <span>Status</span>
+          <span>Actions</span>
+        </div>
+        <% upcomingEvents.forEach(event => { %>
+          <div class="table-row">
+            <div class="table-event-info">
+              <strong><a href="/events/<%= event._id %>"><%= event.title.substring(0,40) %><%= event.title.length > 40 ? '...' : '' %></a></strong>
+              <span class="table-category"><%= event.category %></span>
+            </div>
+            <span class="table-date"><%= new Date(event.date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) %></span>
+            <div class="table-reg">
+              <span class="reg-count-sm"><%= event.registrationCount %> / <%= event.capacity %></span>
+              <div class="mini-bar">
+                <div class="mini-bar-fill" style="width:<%= Math.min((event.registrationCount/event.capacity)*100,100) %>%"></div>
+              </div>
+            </div>
+            <span class="status-badge <%= event.status %>"><%= event.status %></span>
+            <div class="table-actions">
+              <a href="/events/<%= event._id %>/edit" class="btn-xs">Edit</a>
+              <a href="/club/events/<%= event._id %>/attendees" class="btn-xs">Attendees</a>
+              <form action="/events/<%= event._id %>?_method=DELETE" method="POST" style="display:inline">
+                <button type="submit" class="btn-xs btn-danger-xs" onclick="return confirm('Delete this event?')">Delete</button>
+              </form>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Past Events -->
+  <% if (pastEvents.length > 0) { %>
+    <div class="dashboard-section">
+      <div class="section-header-sm">
+        <h2>✅ Past Events</h2>
+      </div>
+      <div class="club-events-table">
+        <div class="table-header">
+          <span>Event</span>
+          <span>Date</span>
+          <span>Total Attended</span>
+          <span>Actions</span>
+        </div>
+        <% pastEvents.forEach(event => { %>
+          <div class="table-row table-row-muted">
+            <div class="table-event-info">
+              <strong><a href="/events/<%= event._id %>"><%= event.title.substring(0,40) %></a></strong>
+              <span class="table-category"><%= event.category %></span>
+            </div>
+            <span class="table-date"><%= new Date(event.date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) %></span>
+            <span class="reg-count-sm"><%= event.registrationCount %> registered</span>
+            <div class="table-actions">
+              <a href="/club/events/<%= event._id %>/attendees" class="btn-xs">View List</a>
+              <a href="/events/<%= event._id %>" class="btn-xs">Details</a>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

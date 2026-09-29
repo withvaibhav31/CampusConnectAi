@@ -1,0 +1,58 @@
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="brand-icon">◈</span>
+      <span>CampusConnect <strong>AI</strong></span>
+    </div>
+    <p class="footer-tagline">Your AI-powered campus events hub</p>
+    <div class="footer-links">
+      <a href="/events">Events</a>
+      <a href="/auth/signup">Join</a>
+      <a href="/auth/login">Login</a>
+    </div>
+    <p class="footer-copy">© 2024 CampusConnect AI · Built with ❤️ for students</p>
+  </div>
+</footer>
+
+<!-- AI Chatbot Widget -->
+<div class="chatbot-container" id="chatbotContainer">
+  <button class="chatbot-toggle" id="chatbotToggle" title="AI Assistant">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+    <span class="chatbot-badge">AI</span>
+  </button>
+
+  <div class="chatbot-panel" id="chatbotPanel">
+    <div class="chatbot-header">
+      <div class="chatbot-avatar">◈</div>
+      <div>
+        <strong>CampusBot</strong>
+        <span class="chatbot-status">● Online</span>
+      </div>
+      <button class="chatbot-close" id="chatbotClose">×</button>
+    </div>
+    <div class="chatbot-messages" id="chatMessages">
+      <div class="chat-msg bot">
+        <span>Hey! 👋 I'm CampusBot. Ask me about events, categories, or anything campus-related!</span>
+      </div>
+      <div class="chat-suggestions">
+        <button class="suggestion-chip" onclick="sendSuggestion(this)">Show coding events</button>
+        <button class="suggestion-chip" onclick="sendSuggestion(this)">Upcoming events</button>
+        <button class="suggestion-chip" onclick="sendSuggestion(this)">Placement drives</button>
+      </div>
+    </div>
+    <div class="chatbot-input-area">
+      <input type="text" id="chatInput" class="chatbot-input" placeholder="Ask me anything..." />
+      <button id="chatSend" class="chat-send-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/main.js"></script>
+</body>
+</html>
